@@ -36,6 +36,16 @@ class Auth
 
     public function user(): ?User
     {
-
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        $id = $_SESSION['auth'] ?? null;
+        if ($id === null) {
+            return null;
+        }
+        $query = $this->pdo->prepare('SELECT * FROM users WHERE id = ?');
+        $query->execute([$id]);
+        $user = $query->fetchObject(User::class);
+        return $user ?: null;
     }
 }
