@@ -39,5 +39,24 @@ $user = $auth->user();
     <li><a href="admin.php">Admin only</a></li>
     <li><a href="user.php">User only</a></li>
 </ul>
+
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Login</th>
+        <th>Role</th>
+    </tr>
+    <tbody>
+    <?php foreach ($users as $user): ?>
+    <tr>
+        <td><?= $user['id'] ?></td>
+        <td><?= $user['username'] ?></td>
+        <td><?= $user['role'] ?></td>
+    </tr>
+    <?php endforeach; ?>
+    </tbody>
+    </thead>
+</table>
 </body>
 </html>
