@@ -1,22 +1,20 @@
 <?php
 require '../vendor/autoload.php';
 
+use App\App;
 use App\Auth;
 
 session_start();
 
-$pdo = new PDO("sqlite:../data.sqlite", null, null, [
-    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
-]);
-
-$auth = new Auth($pdo);
+$auth = App::getAuth();
 $error = false;
+
 
 if ($auth->user() !== null) {
     header('Location: index.php');
     exit();
 }
+
 
 if (!empty($_POST)) {
     $user = $auth->login($_POST['username'], $_POST['password']);
@@ -43,6 +41,10 @@ if (!empty($_POST)) {
 
 <?php if ($error): ?>
     <div class="alert alert-danger">Invalid login or password</div>
+<?php endif ?>
+
+<?php if (isset($_GET['forbid'])): ?>
+    <div class="alert alert-danger">Denied permission</div>
 <?php endif ?>
 
 <form action="" method="post">

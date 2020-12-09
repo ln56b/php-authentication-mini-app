@@ -1,16 +1,11 @@
 <?php
 require '../vendor/autoload.php';
 
+use App\App;
 use App\Auth;
 
-$pdo = new PDO("sqlite:../data.sqlite", null, null, [
-    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
-]);
-
-$users=$pdo->query('SELECT * FROM users')->fetchAll();
-$auth = new App\Auth($pdo);
-$user = $auth->user();
+$users= App::getPDO()->query('SELECT * FROM users')->fetchAll();
+$user = App::getAuth()->user();
 ?>
 
 <!doctype html>
@@ -32,7 +27,7 @@ $user = $auth->user();
 <?php endif; ?>
 
 <?php if ($user): ?>
-<p>Welcome <?= $user->username ?></p>
+<p>Welcome <?= $user->username ?> - <a href="logout.php">Sign out</a></p>
 <?php endif ?>
 
 <ul>
