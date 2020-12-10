@@ -8,11 +8,14 @@ class Auth
 {
     private $pdo;
     private $loginPath;
+    private $session;
 
-    public function __construct(PDO $pdo, string $loginPath)
+    // &$session means a reference to the array of sessions
+    public function __construct(PDO $pdo, string $loginPath, array &$session)
     {
         $this->pdo = $pdo;
         $this->loginPath = $loginPath;
+        $this->session = &$session;
     }
 
     public function login(string $username, string $password): ?User
@@ -26,10 +29,7 @@ class Auth
         }
         // Check password
         if (password_verify($password, $user->password)) {
-            if (session_status() === PHP_SESSION_NONE) {
-                session_start();
-            }
-            $_SESSION['auth'] = $user->id;
+            $this->session['auth'] = $user->id;
             return $user;
         }
         return null;
